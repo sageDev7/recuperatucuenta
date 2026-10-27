@@ -3,14 +3,7 @@
   var body = document.body;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- WhatsApp: un solo número para todos los botones ---------- */
   var WA_NUMBER = "5491126054556";
-  document.querySelectorAll(".js-wa").forEach(function (a) {
-    var msg = a.getAttribute("data-msg") || "Hola, me inhabilitaron una cuenta y quisiera hacer una consulta.";
-    a.href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
-    a.target = "_blank";
-    a.rel = "noopener";
-  });
 
   /* ---------- header ---------- */
   var hdr = document.getElementById("hdr");
@@ -18,16 +11,6 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* ---------- menú mobile (la hamburguesa se transforma en cruz) ---------- */
-  var burger = document.getElementById("burger");
-  function setNav(open) {
-    body.classList.toggle("nav-open", open);
-    burger.setAttribute("aria-expanded", open ? "true" : "false");
-    burger.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
-  }
-  burger.addEventListener("click", function () { setNav(!body.classList.contains("nav-open")); });
-  document.getElementById("mnavOv").addEventListener("click", function () { setNav(false); });
-  document.querySelectorAll(".mnav a").forEach(function (a) { a.addEventListener("click", function () { setNav(false); }); });
 
   /* ---------- título: entra palabra por palabra (el &nbsp; mantiene palabras juntas) ---------- */
   var wordIdx = 0;
@@ -51,26 +34,6 @@
     });
   }
   if (!reduce) document.querySelectorAll(".split-words").forEach(splitWords);
-
-  /* ---------- contadores ---------- */
-  function runCount(el) {
-    var to = parseFloat(el.getAttribute("data-to")), pre = el.getAttribute("data-prefix") || "";
-    var dur = 1800, t0 = null;
-    function step(t) {
-      if (!t0) t0 = t;
-      var k = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - k, 4);
-      el.textContent = pre + Math.round(to * e);
-      if (k < 1) requestAnimationFrame(step);
-    }
-    el.textContent = pre + "0";
-    requestAnimationFrame(step);
-  }
-  if (!reduce && "IntersectionObserver" in window) {
-    var cio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { if (en.isIntersecting) { runCount(en.target); cio.unobserve(en.target); } });
-    }, { threshold: 0.6 });
-    document.querySelectorAll(".count").forEach(function (el) { cio.observe(el); });
-  }
 
   /* ---------- preguntas: acordeón con apertura suave (una abierta a la vez por lista) ---------- */
   function animateTo(a, from, to, done) {
@@ -121,60 +84,38 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- parallax del hero ---------- */
-  var heroBg = null, ticking = false;
-  if (heroBg && !reduce) {
-    window.addEventListener("scroll", function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        ticking = false;
-        if (window.scrollY < window.innerHeight * 1.2) heroBg.style.transform = "translate3d(0," + (window.scrollY * 0.25) + "px,0)";
-      });
-    }, { passive: true });
-  }
-
-  /* ---------- WhatsApp flotante: se oculta en el hero, el contacto y el footer ---------- */
-  var fab = document.getElementById("waFloat");
-  if (fab && "IntersectionObserver" in window) {
-    var hidden = new Set();
-    var fio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { if (en.isIntersecting) hidden.add(en.target); else hidden.delete(en.target); });
-      fab.classList.toggle("hide", hidden.size > 0);
-    });
-    document.querySelectorAll(".hero, #contacto, #ftr").forEach(function (el) { fio.observe(el); });
-  }
-
-  /* ---------- formulario (FormSubmit + modal) ---------- */
-  var form = document.getElementById("contactForm"), btn = document.getElementById("formSubmitBtn");
-  var iframe = document.getElementById("formsubmit-iframe"), modal = document.getElementById("okModal"), sending = false;
+  /* ---------- formulario: arma un mensaje natural y lo abre en WhatsApp ---------- */
+  var form = document.getElementById("contactForm");
   if (form) {
+    var val = function (n) { var el = form.elements[n]; return el ? el.value.trim() : ""; };
     var valid = function (input) {
-      var v = input.value.trim();
-      var ok = v !== "" && (input.type !== "email" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      var ok = input.value.trim() !== "";
       input.closest(".field").classList.toggle("err", !ok);
       return ok;
     };
+    var buildMsg = function () {
+      var user = val("usuario"), red = val("red"), emp = val("empresa"), dos = red === "Instagram y Facebook";
+      if (red !== "Facebook" && user && user.charAt(0) !== "@") user = "@" + user;
+      var m = "Hola, me llamo " + val("nombre") + ". Me inhabilitaron " + (dos ? "mis cuentas de Instagram y Facebook" : "mi cuenta de " + red) + " (" + user + ")";
+      if (emp) m += ", " + (dos ? "que son" : "que es") + " de mi empresa, " + emp;
+      m += ". " + (dos ? "Tienen" : "Tiene") + " " + val("seguidores") + " seguidores. ¿Me podrían ayudar a " + (dos ? "recuperarlas" : "recuperarla") + "?";
+      return m + " Mi número es " + val("whatsapp") + ".";
+    };
     form.addEventListener("submit", function (e) {
+      e.preventDefault();
       var ok = true;
       form.querySelectorAll("[required]").forEach(function (i) { if (!valid(i)) ok = false; });
-      if (!ok) { e.preventDefault(); var f = form.querySelector(".field.err input,.field.err select,.field.err textarea"); if (f) f.focus(); return; }
-      sending = true; btn.disabled = true; btn.textContent = "Enviando...";
+      if (!ok) { var f = form.querySelector(".field.err input,.field.err select"); if (f) f.focus(); return; }
+      if (window.fbq) fbq("track", "Lead");
+      var url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(buildMsg());
+      var w = window.open(url, "_blank");
+      if (!w) window.location.href = url;
     });
     form.querySelectorAll("[required]").forEach(function (i) {
       i.addEventListener("input", function () { if (i.closest(".field").classList.contains("err")) valid(i); });
       i.addEventListener("change", function () { if (i.closest(".field").classList.contains("err")) valid(i); });
     });
-    iframe.addEventListener("load", function () {
-      if (!sending) return;
-      sending = false; form.reset(); btn.disabled = false; btn.textContent = "Enviar consulta";
-      modal.classList.add("show");
-    });
-    modal.addEventListener("click", function (e) { if (e.target === modal || e.target.hasAttribute("data-close")) modal.classList.remove("show"); });
   }
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { setNav(false); if (modal) modal.classList.remove("show"); }
-  });
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 })();

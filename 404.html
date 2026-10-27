@@ -14,6 +14,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
 <link rel="stylesheet" href="./styles.css">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1573247911514554');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1573247911514554&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -24,27 +41,9 @@
       <span class="logo"><span>Recupera tu</span> <b>Cuenta</b></span>
       <small>Gestión legal</small>
     </a>
-    <nav class="nav" aria-label="Principal">
-      <a href="./index.html#como">Cómo trabajamos</a>
-      <a href="./index.html#quien">Quién lleva tu caso</a>
-      <a href="./index.html#testimonios">Testimonios</a>
-      <a href="./index.html#preguntas">Preguntas</a>
-    </nav>
-    <a class="btn btn-gold btn-sm hdr-cta js-wa" href="#" data-msg="Hola, me inhabilitaron una cuenta y quisiera hacer una consulta.">Consultar</a>
-    <button class="burger" id="burger" aria-label="Abrir menú" aria-controls="mnav" aria-expanded="false"><span></span><span></span></button>
+    <a class="btn btn-gold btn-sm hdr-cta" href="./index.html#contacto">Consultar</a>
   </div>
 </header>
-
-<div class="mnav-ov" id="mnavOv"></div>
-<nav class="mnav" id="mnav" aria-label="Menú">
-  <span class="logo logo-lg" aria-hidden="true"><span>Recupera tu</span> <b>Cuenta</b></span>
-  <a href="./index.html#como">Cómo trabajamos</a>
-  <a href="./index.html#quien">Quién lleva tu caso</a>
-  <a href="./index.html#testimonios">Testimonios</a>
-  <a href="./index.html#preguntas">Preguntas</a>
-  <a href="./index.html#contacto">Contacto</a>
-  <a class="btn btn-gold js-wa" href="#" data-msg="Hola, me inhabilitaron una cuenta y quisiera hacer una consulta.">Consultar por WhatsApp</a>
-</nav>
 
 <main>
 
@@ -52,10 +51,9 @@
   <div class="wrap">
     <span class="nf-num" aria-hidden="true">404</span>
     <h1 class="h2">Esta página <em>no existe.</em></h1>
-    <p class="lead">Puede que haya cambiado de dirección. Volvé al inicio o escribinos y te ayudamos.</p>
+    <p class="lead">Puede que haya cambiado de dirección. Volvé al inicio y contanos tu caso.</p>
     <div class="hero-ctas">
       <a class="btn btn-gold" href="./index.html">Volver al inicio</a>
-      <a class="btn btn-line js-wa" href="#" data-msg="Hola, me inhabilitaron un perfil y quisiera hacer una consulta.">Consultar por WhatsApp</a>
     </div>
   </div>
 </section>
@@ -68,18 +66,6 @@
       <a href="./index.html" class="brand"><span class="logo"><span>Recupera tu</span> <b>Cuenta</b></span><small>Gestión legal</small></a>
       <p>Gestión legal para la recuperación de cuentas de Instagram y Facebook inhabilitadas por Meta.</p>
     </div>
-    <div class="ftr-col">
-      <h4>Secciones</h4>
-      <ul><li><a href="./index.html#como">Cómo trabajamos</a></li><li><a href="./index.html#quien">Quién lleva tu caso</a></li><li><a href="./index.html#testimonios">Testimonios</a></li><li><a href="./index.html#preguntas">Preguntas frecuentes</a></li></ul>
-    </div>
-    <div class="ftr-col">
-      <h4>Contacto</h4>
-      <ul class="ftr-data">
-        <li><i class="ti ti-brand-whatsapp"></i><a class="js-wa" href="#" data-msg="Hola, me inhabilitaron una cuenta y quisiera hacer una consulta.">+54 9 11 2605-4556</a></li>
-        <li><i class="ti ti-mail"></i><a href="mailto:recuperatucuenta.ar@gmail.com">recuperatucuenta.ar@gmail.com</a></li>
-        <li><i class="ti ti-brand-instagram"></i><a href="https://www.instagram.com/recuperatucuenta.ar/" target="_blank" rel="noopener">@recuperatucuenta.ar</a></li>
-      </ul>
-    </div>
   </div>
   <div class="ftr-legal">
     <p>Dr. Nicolás Avots Sugimoto · Abogado matriculado en el CPACF. Recupera Tu Cuenta no está afiliado a Meta Platforms, Inc. Instagram y Facebook son marcas de Meta. La rehabilitación de una cuenta depende exclusivamente de la decisión de Meta.</p>
@@ -91,7 +77,6 @@
   </div>
 </footer>
 
-<a class="wa-float js-wa" id="waFloat" href="#" data-msg="Hola, me inhabilitaron una cuenta y quisiera hacer una consulta." aria-label="Escribir por WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
 
 <script src="./main.js"></script>
 </body>
