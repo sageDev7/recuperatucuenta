@@ -37,7 +37,7 @@ def clean(s):
 for f, (path, _) in PAGES.items():
     s = open(f, encoding="utf8").read()
     s = clean(s)
-    OG = "https://i.imgur.com/cQdFTBM.jpeg"   # badge original subido por Axel
+    OG = "https://i.imgur.com/lnOSpQi.jpeg"   # badge original subido por Axel
     s = set_meta(s, "property", "og:image", OG)
     s = set_meta(s, "name", "twitter:image", OG)
     s = set_meta(s, "property", "og:url", DOM + path)
@@ -45,7 +45,7 @@ for f, (path, _) in PAGES.items():
     if f == "index.html":
         m = re.search(r'<script type="application/ld\+json">\s*(\{.*?\})\s*</script>', s, re.S)
         data = json.loads(m.group(1))
-        data.update({"@id": DOM + "/#estudio", "url": DOM + "/", "image": "https://i.imgur.com/cQdFTBM.jpeg", "logo": DOM + "/favicon.png"})
+        data.update({"@id": DOM + "/#estudio", "url": DOM + "/", "image": "https://i.imgur.com/lnOSpQi.jpeg", "logo": DOM + "/favicon.png"})
         s = s.replace(m.group(0), '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=2) + "\n</script>")
     open(f, "w", encoding="utf8", newline="\n").write(s); print("ok", f)
 
